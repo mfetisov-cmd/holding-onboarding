@@ -1,0 +1,133 @@
+---
+description: Vivid UI design system component reference for vibe-coding
+globs: ["src/**/*.tsx", "src/**/*.ts"]
+alwaysApply: true
+---
+
+# Vivid UI Component Reference
+
+This project is a standalone prototyping environment using the Vivid Money SME design system (vivid-ui). Components are pulled from the real `sme-web` GitLab repo and live at `src/shared/ui/vivid-ui/`.
+
+## Key Architecture
+
+- **Styled-components** with `DefaultThemeProvider` wrapping the app
+- **1px root font-size**: `html { font-size: 1px }` — all `rem` values map 1:1 to pixels
+- **Theme tokens**: Access via `useTheme()` → `theme.token.color.c6`, `theme.token.sizeUnits(16)`, etc.
+- **Polymorphic components**: Use `component` prop to change rendered element
+- **Transient props**: Styled-component props prefixed with `$` via `PrefixType<T>`
+
+## Available Components
+
+### Layout
+```
+import { Flex, Row, Column, CenteredBox, Grid } from '@/shared/ui/vivid-ui/components/Layout';
+import { Spacer } from '@/shared/ui/vivid-ui/components/Spacer';
+import { Stack } from '@/shared/ui/vivid-ui/components/Stack';
+import { Divider } from '@/shared/ui/vivid-ui/components/Divider';
+import { Box } from '@/shared/ui/vivid-ui/components/Box';
+import { Paper } from '@/shared/ui/vivid-ui/components/Paper';
+```
+
+### Typography
+```
+import { Typography } from '@/shared/ui/vivid-ui/components/Typography';
+// Variants: h1, h2, h3, h4, h5, h6, bodyL, bodyM, bodyS, bodyXS
+// Props: variant, weight, color, component (polymorphic)
+```
+
+### Buttons
+```
+import { Button, ButtonGroup } from '@/shared/ui/vivid-ui/components/ButtonV2';
+// Variants: primary, secondary, ghost, destructive, shimmer
+// Sizes: large, medium, small
+// Props: variant, size, fullWidth, loading, disabled, leftIcon, rightIcon
+```
+
+### Form Controls
+```
+import { Input } from '@/shared/ui/vivid-ui/components/Input';
+import { Textarea } from '@/shared/ui/vivid-ui/components/Textarea';
+import { Checkbox } from '@/shared/ui/vivid-ui/components/Checkbox';
+import { Chips } from '@/shared/ui/vivid-ui/components/Chips';
+import { DropList } from '@/shared/ui/vivid-ui/components/DropList';
+```
+
+### Overlays
+```
+import { Popup } from '@/shared/ui/vivid-ui/components/Popup';
+import { Popover } from '@/shared/ui/vivid-ui/components/Popover';
+```
+
+### Icons (24px system)
+```
+import { ArrowLeft24, Check24, Close24, Search24, ... } from '@/shared/ui/vivid-ui/components/Icons';
+```
+
+### Data Display
+```
+import { Table, TableBody, TableHead, TableRow, TableCell } from '@/shared/ui/vivid-ui/components/Table';
+import { ProgressBar } from '@/shared/ui/vivid-ui/components/ProgressBar';
+import { StarRating } from '@/shared/ui/vivid-ui/components/StarRating';
+import { Segment } from '@/shared/ui/vivid-ui/components/Segment';
+import { SegmentUnit } from '@/shared/ui/vivid-ui/components/SegmentUnit';
+```
+
+### Other
+```
+import { Loader } from '@/shared/ui/vivid-ui/components/Loader';
+import { Skeleton } from '@/shared/ui/vivid-ui/components/Skeleton';
+import { ListItem } from '@/shared/ui/vivid-ui/components/ListItem';
+import { Collapsible } from '@/shared/ui/vivid-ui/components/Collapsible';
+import { Switch } from '@/shared/ui/vivid-ui/components/Switch';
+import { Select } from '@/shared/ui/vivid-ui/components/Select';
+import { PasscodeInput } from '@/shared/ui/vivid-ui/components/PasscodeInput';
+import { DatePicker } from '@/shared/ui/vivid-ui/components/DatePicker';
+import { DateRangePicker } from '@/shared/ui/vivid-ui/components/DateRangePicker';
+import { Calendar } from '@/shared/ui/vivid-ui/components/Calendar';
+import { MobileHeader } from '@/shared/ui/vivid-ui/components/MobileHeader';
+import { Portal } from '@/shared/ui/vivid-ui/components/Portal';
+```
+
+### Drafts (experimental)
+```
+import { Accordion } from '@/shared/ui/vivid-ui/drafts/Accordion';
+import { Alert } from '@/shared/ui/vivid-ui/drafts/Alert';
+import { FileField } from '@/shared/ui/vivid-ui/drafts/FileField';
+import { FilterChips } from '@/shared/ui/vivid-ui/drafts/FilterChips';
+import { TabsList } from '@/shared/ui/vivid-ui/drafts/TabsList';
+```
+
+## Theme Colors (light)
+
+- `c1` — background (white)
+- `c2` — secondary text (gray)
+- `c3` — disabled text
+- `c4` — borders
+- `c5` — hover background
+- `c6` — primary brand (purple `#7B61FF`)
+- `c7` — secondary brand
+- `c8` — error/destructive (red)
+- `c9` — warning (orange)
+- `c10` — success (green)
+- `c13` — info (blue)
+- `c16` — accent (pink)
+
+## Theme Spacing
+
+```ts
+const theme = useTheme();
+theme.token.spacingXS   // 4
+theme.token.spacingS    // 8
+theme.token.spacingM    // 12
+theme.token.spacingL    // 16
+theme.token.spacingXL   // 24
+theme.token.spacingXXL  // 32
+theme.token.sizeUnits(n) // n * 4 (rem)
+```
+
+## Code Conventions (from sme-web)
+
+- Do NOT use `FC` type for components
+- Prefer `type` over `interface`
+- All pages/components must be `'use client'` (styled-components requirement)
+- Document helper functions and exported props with JSDoc
