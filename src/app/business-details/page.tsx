@@ -461,6 +461,8 @@ export default function BusinessDetailsPage() {
   const [manualMode, setManualMode] = useState(false);
   const [manualName, setManualName] = useState('');
   const [manualRegNum, setManualRegNum] = useState('');
+  const [manualCountry, setManualCountry] = useState<SelectOption | string>('');
+  const [manualAddress, setManualAddress] = useState('');
   const [pendingOwnership, setPendingOwnership] = useState<Record<number, string>>({});
   let nextId = subsidiaries.length > 0 ? Math.max(...subsidiaries.map((s) => s.id)) + 1 : 1;
   const allOwnershipFilled = subsidiaries.length > 0 && subsidiaries.every((s) => s.ownership !== null);
@@ -510,15 +512,18 @@ export default function BusinessDetailsPage() {
     resetSearch();
   };
 
+  const manualCountryValue = typeof manualCountry === 'string' ? manualCountry : manualCountry?.value;
+
   const addManual = () => {
     if (!manualName.trim() || !ownershipPct) return;
+    const countryLabel = COUNTRY_OPTIONS.find((c) => c.value === manualCountryValue)?.title || '';
     setSubsidiaries((prev) => [
       ...prev,
       {
         id: nextId,
         name: manualName.trim(),
         regNumber: manualRegNum.trim(),
-        address: '',
+        address: [manualAddress.trim(), countryLabel].filter(Boolean).join(', '),
         ownership: `${ownershipPct}%`,
       },
     ]);
@@ -533,6 +538,8 @@ export default function BusinessDetailsPage() {
     setManualMode(false);
     setManualName('');
     setManualRegNum('');
+    setManualCountry('');
+    setManualAddress('');
   };
 
   const confirmOwnership = (id: number) => {
@@ -803,10 +810,27 @@ export default function BusinessDetailsPage() {
             <Spacer size={4} />
             <Input
               id="manualRegNum"
-              label="Registration number (optional)"
+              label="Registration number"
               placeholder="e.g. HRB 12345"
               value={manualRegNum}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setManualRegNum(e.target.value)}
+              size="large"
+            />
+            <Spacer size={4} />
+            <NativeSelect
+              label="Country"
+              value={manualCountry}
+              onChange={setManualCountry}
+              options={COUNTRY_OPTIONS}
+              size="large"
+            />
+            <Spacer size={4} />
+            <Input
+              id="manualAddress"
+              label="Address"
+              placeholder="e.g. Friedrichstraße 100, 10117 Berlin"
+              value={manualAddress}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setManualAddress(e.target.value)}
               size="large"
             />
           </>
@@ -830,7 +854,7 @@ export default function BusinessDetailsPage() {
               <Button
                 variant="primary"
                 size="small"
-                disabled={!ownershipPct || (manualMode && !manualName.trim())}
+                disabled={!ownershipPct || (manualMode && (!manualName.trim() || !manualCountryValue))}
                 onClick={manualMode ? addManual : addFromSearch}
               >
                 Add
